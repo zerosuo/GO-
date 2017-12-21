@@ -1,0 +1,88 @@
+GO环境配置
+
+这个配置攻略已经是烂大街了吖，单不是小路写的啊。
+
+------GO安装------
+首先下载安装包 这是毋庸置疑的 从这个地方下载----> https://studygolang.com/dl [Go语言中文网社区]
+安装方式：
+
+	Go源码安装：对使用linux等系统用户或者开发者 从源码安装最方便的
+
+	Go标准安装：支持Windows Mac Linux等 适合初学者，只需要下载好安装包 安装即可
+
+	第三方工具安装：Ubuntu等通过apt-get 等方式安装 适合熟悉自己操作系统的用户
+
+	！虽然我不是小白，但是我喜欢安装包方式。。。爱好.
+
+
+
+	------源码安装------
+	前置条件：Go的源代码中，有些部分是用Plan 9 C和AT&T汇编写的，因此假如你要想从源码安装，就必须安装C的编译工具。
+
+		Mac系统：只要你安装了Xcode，就已经包含了相应的编译工具。
+
+		Unix系统：需要安装gcc等工具。例如Ubuntu系统可通过在终端中执行sudo apt-get install gcc libc6-dev来安装编译工具。(centos 是yum等)
+
+		Windows系统：你需要安装MinGW，然后通过MinGW安装gcc，并设置相应的环境变量。
+
+		！！ Go使用Mercurial进行版本管理，首先你必须安装了Mercurial，然后才能下载。假设你已经安装好Mercurial，执行如下代码：
+
+			假设已经位于Go的安装目录 $GO_INSTALL_DIR下：
+
+
+		代码如下:
+		hg clone -u release https://code.google.com/p/go
+ 		cd go/src
+ 		./all.bash
+
+
+
+		运行all.bash后出现"ALL TESTS PASSED"字样时才算安装成功。
+
+		上面是Unix风格的命令，Windows下的安装方式类似，只不过是运行all.bat，调用的编译器是MinGW的gcc。
+
+		然后设置几个环境变量
+
+		代码如下:
+		export GOROOT=$HOME/go
+ 		xport GOBIN=$GOROOT/bin
+		export PATH=$PATH:$GOBIN
+
+
+	------安装包安装------
+	Go安装：
+			linux 解压到： /usr/local/go   	
+			windows系统默认安装到：c:\Go，
+			当然你可以改变他们的安装位置，但是改变之后你必须在你的环境变量中设置如下信息：
+			
+			linux 安装完配置环境：	
+				export GOROOT=$HOME/go  
+ 				export PATH=$PATH:$GOROOT/bin
+ 			windows:(这个环境在电脑右键属性 -->选择 "高级系统设置" -->环境变量里面)
+ 				GOROOT 值为 Go 安装根目录 C:\Go\ 。	
+
+
+ 			Mac安装：下载安装包一路安装到底就好。自动配置环境变量了
+
+ 	------第三方安装------
+ 	Go安装：
+ 		ubuntu: apt-get install 
+ 		centos: yum install		
+
+GO环境配置
+	先一起看看GOPATH目录有些什么？
+	从linux中看 默认有三个：
+		bin: --->存放变异后生成的可执行文件
+		pkg: --->编译后生成的文件
+		src：--->存放源代码
+
+		！！！可以有多个工作目录空间 但是要配置上环境变量。[但是go get的时候会默认放到第一个空间]
+
+GO命令：(常用命令)
+	go build :测试编译。
+	go clean :移除当前源码里的编译生成的文件
+	go fmt : 格式化代码
+	go get:动态获取远程代码
+	go install:生成编译文件并将结果移到gopath
+	go test:运行测试用的文件
+	go doc：文档。		
