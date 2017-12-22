@@ -1,0 +1,147 @@
+Go变量
+	使用var关键字是Go最基本的定义变量方式
+
+	//定义一个名称"carName",类型为"type"的变量
+	var carName type
+
+	//定义多个变量，比如三个变量
+	var carName1, carName2, carName3 type
+
+	定义变量并初始化
+	//初始化"carName"的变量为value 类型type
+	var carName type = value
+
+	定义多个变量并初始化
+
+	var carName1, carName2, carName3 type = v1, v2, v3
+
+
+	定义变量变种(上面繁琐 于是提供下面方法)：
+		//还是定义三个变量
+		var carName1, carName2, carName3 = v1, v2, v3
+
+	再次改进定义变量方式(因为上面还是感觉繁琐)：
+		//编译器会根据初始化的值自动推导出相应的类型
+		carName1, carName2, carName3 := v1, v2, v3
+
+
+		有人疑惑啦 := 这是什么鬼啊？！！！
+		:= 符号取代了var 和type 这种形式叫做简短声明。不过它有一个限制只能用在函数内部。全局一般还是第二种 var定义
+
+	_（下划线） 特殊的变量名。任何赋予它的值都会被丢弃
+	
+	_, a := 1, 2 //赋值时候 1被舍弃了 2 赋值给a
+
+	！！！在Go 如果声明一个变量 但是最终没使用 会在 编译时候报错
+
+Go常量
+	常量，字如其名，在编译阶段就确定的值，在程序运行时无法改变的值
+	常量：可定义为 数值，布尔值，字符串
+
+	//定义一个数字为 168
+	const a = 168
+
+	从上面例子就能推出常量语法： const constantName = value ---> const xxx(常量名) = xx（常量值）
+
+内置基础类型
+Boolean
+	在Go中， 布尔值的类型为bool 值是true或者false 默认为false
+
+数值类型：
+	整数类型有无符号和带符号两种。Go同时支持int和uint 两种类型长度
+
+	！！！ 类型的变量之间不允许互相赋值或操作 ，否则编译时报错
+
+字符串：
+	Go中字符串采用utf-8字符集编码 类型string 在"" 或者''中包裹
+	！！！ Go字符串是不可以改变的
+
+
+错误类型
+	Go内置一个error类型 处理错误信息
+
+
+技巧：
+	1.分组声明
+		在Go语言中，同时可以声明多个常量、变量、或者导入包可使用分组方式
+
+		！！！在定义分组常量时候要注意iota
+	2.iota枚举
+		Go里有一个关键字iota 这个关键字声明enum时采用 默认值0 每次调用+1
+	3.GO程序设计规则
+		！！！要记住规则 。一个良好的开始就是从熟悉规则
+		---大写字母开头的变量是可以被其他包读取的 是公用变量
+		---小写字母开头是不可以被其他包读取的是私有变量
+		---函数同理也是一样大写字母开头相当于public，小写相当于private
+
+	array slice map
+
+	array:就是数组 -->用法 var arr [n] type  //在[n]type中，n表示长度 ，type表示类型
+
+	var arr [5] int //声明一个int类型的数组
+	arr [0] = 42 //数组下标0 赋值42 同时数组也是下标从0开始的
+
+	另一种简化声明：
+		a := [3] int{1, 2, 3} //声明一个长度为3的int数组
+		b := [5] int{1, 2} //声明长度为5的数组 初始赋值1,2 其他没赋值元素默认为0
+		c := [...] int{1,2} //省略长度... go自动根据数据计算长度
+	GO数组嵌套
+		二维数组：doubleArray := [2][4] int{}	
+
+	slice:在很多场景中数组并不能满足需求。在初始蒂尼数组时，我们不知道需要多大数组 -->动态数组 slice 切片
+			slice不是真的动态数组是一个引用类型。
+			slice总是指向一个底层array，slice声明可以像array一样 只是不需要长度
+
+			var aslice [] int -->发现[]中没有数字吧
+			我们可以声明一个slice并初始化
+			slice := []byte {'a', 'b', 'c', 'd'}
+
+			!!!slice和数组在声明时区别 ：声明数组方括号是有数组的长度或者使用[...]自动计数的，声明slice是没有任何字符
+
+
+
+			slice 的默认开始是从0 ar[:n] --->ar[0:n]
+
+			slice 的第二个序列默认是数组的长度 ar[n:] --->[n:len(ar)]
+
+			如果从一个数组里直接获取slice 可以 ar[:] --->[0:len(ar)]
+
+			!!!slice是引用类型 如果引用改变其中元素值时，其他引用也会改变
+
+			slice像一个结构体{一个指针  长度  最大长度}
+
+
+			slice:  len ---->获取slice的长度
+					cap ---->获取slice的最大容量
+					append ->向slice里追加一个或者多个元素返回一个和slice一样的类型的slice
+					copy --->copy从源slice的src中复制元素到目标dst 并返回赋值元素的个数
+			！！！append 会改变slice所引用数组的内容 ，从而影响其他引用同一数组的其他slice。如果slice没有剩余空间追加的元素会动态分配
+			到新的空间这样原数组的容易保持不变；其他引用数组的slice也不受影响
+
+
+	map：
+		map[keyType] valueType
+
+		map读取和设置都和slice一样 通过key来操作但是他们最大区别是：slice的index只能是int类型  ，而map的key是很多类型都可以
+
+		//声明key是字符串，int值 需要使用前初始化
+		var number map[string] int
+		//另一种声明方法
+		numbers := make(map[string] int)
+		numbers ["one"] = 1 //赋值
+
+		//map 左边是key 右边是value
+
+		！！！-map是无序的，每次打印出来的map都会不一样所以只能通过key取
+			  -map长度是不固定的和slice一样是引用类型
+			  -len一样适用于map 返回map个数
+			  -map值很容易修改通过key
+			  -map初始化可以通过key:val,map内置机制判断是否存在key
+		通过delete删除map的元素：
+			delete(rating,"key")
+
+	make/new
+		make:　用于内建类型(map、slice和channel)内存分配
+		new： 用于各种类型的内存分配
+
+		区别：make只能创建3种 并且会初始化 返回的有初始值的T类型 。new创建各种但是返回的是地址 即指针
